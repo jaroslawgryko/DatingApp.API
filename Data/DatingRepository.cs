@@ -38,6 +38,12 @@ namespace DatingApp.API.Data
             users = users.Where(u => u.ID != userParams.UserId);
             users = users.Where(u => u.Gender == userParams.Gender);
 
+            if (userParams.MinAge != 18 || userParams.MaxAge != 99)
+            {
+                users = users.Where(u => u.DateOfBirth.CalculateAge() >= userParams.MinAge
+                 && u.DateOfBirth.CalculateAge() <= userParams.MaxAge );
+            }
+
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
