@@ -47,6 +47,8 @@ namespace DatingApp.API.Controllers
             messageForCreationDto.SenderId = userId;
 
             var recipient = await _repo.GetUser(messageForCreationDto.RecipientId);
+            var sender = await _repo.GetUser(messageForCreationDto.SenderId);
+
             if (recipient == null)
                 return BadRequest("Nie znaleziono odbiorcy");
             
@@ -54,7 +56,7 @@ namespace DatingApp.API.Controllers
 
             _repo.Add(message);
 
-            var messageToReturn = _mapper.Map<MessageForCreationDto>(message);
+            var messageToReturn = _mapper.Map<MessageToReturnDto>(message);
 
             if(await _repo.SaveAll())
             {
